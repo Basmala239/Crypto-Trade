@@ -1,5 +1,5 @@
-import 'package:crypto_trade/features/auth/signin/presentation/widgets/signin_body.dart';
-import 'package:crypto_trade/features/auth/signin/presentation/widgets/signin_tap.dart';
+import 'package:crypto_trade/features/auth/sign_in/presentation/widgets/sign_in_body.dart';
+import 'package:crypto_trade/features/auth/sign_in/presentation/widgets/sign_in_tap.dart';
 import 'package:crypto_trade/features/auth/signup/view/widget/sign_up_body.dart';
 import 'package:flutter/material.dart';
 

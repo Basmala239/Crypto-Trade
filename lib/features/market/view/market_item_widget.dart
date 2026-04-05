@@ -1,6 +1,5 @@
-import 'package:crypto_trade/core/string%20extensions.dart';
-import 'package:crypto_trade/data/model/coin_model.dart';
-import 'package:crypto_trade/data/model/responce/coin.dart';
+import 'package:crypto_trade/core/string_extensions.dart';
+import 'package:crypto_trade/data/model/response/coin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 

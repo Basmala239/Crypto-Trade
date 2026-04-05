@@ -1,5 +1,4 @@
-// This can be used if you want a unified representation
-import 'package:crypto_trade/data/model/responce/trending_coin.dart';
+import 'package:crypto_trade/data/model/response/trending_coin.dart';
 
 import 'coin_market.dart';
 
@@ -24,7 +23,6 @@ class Coin {
     this.isTrending = false,
   });
 
-  // Convert from CoinMarket
   factory Coin.fromMarket(CoinMarket market, {bool isTrending = false}) {
     return Coin(
       id: market.id,
@@ -38,7 +36,6 @@ class Coin {
     );
   }
 
-  // Convert from TrendingCoin
   factory Coin.fromTrending(TrendingCoin trending, {bool isTrending = true}) {
     return Coin(
       id: trending.id,

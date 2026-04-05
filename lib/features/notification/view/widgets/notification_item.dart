@@ -5,10 +5,10 @@ import '../../../../data/model/notification_model.dart';
 
 Widget notificationItemWidget(NotificationModel item) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8), // Added vertical padding for spacing
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min, // Tells the column to be as small as its children
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,

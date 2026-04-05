@@ -1,8 +1,7 @@
 import 'package:crypto_trade/core/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget walletAppBar() {
+Widget walletAppBar(String balance) {
   return Row(
     children: [
       Column(
@@ -13,11 +12,11 @@ Widget walletAppBar() {
               fontSize: 14,
               fontWeight: FontWeight.w400),),
           SizedBox(height: 12,),
-          Text("40,059.83", style: TextStyle(color: MyColor.white,
+          Text(balance, style: TextStyle(color: MyColor.white,
               fontSize: 32,
               fontWeight: FontWeight.w700),),
           SizedBox(height: 4,),
-          Text("\$468,554.23", style: TextStyle(color: MyColor.grayB7,
+          Text("\$$balance", style: TextStyle(color: MyColor.grayB7,
               fontSize: 14,
               fontWeight: FontWeight.w400),),
           SizedBox(height: 20,),

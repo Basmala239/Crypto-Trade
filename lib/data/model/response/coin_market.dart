@@ -38,7 +38,6 @@ class CoinMarket {
     );
   }
 
-  // Helper getters
   bool get isPriceUp => priceChangePercentage24h >= 0;
   String get formattedPrice => '\$${currentPrice.toStringAsFixed(2)}';
   String get formattedMarketCap => _formatNumber(marketCap);

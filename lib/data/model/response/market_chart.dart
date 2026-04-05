@@ -23,15 +23,12 @@ class MarketChart {
     );
   }
 
-  // Get min and max prices for chart scaling
   double get minPrice => prices.map((p) => p.price).reduce((a, b) => a < b ? a : b);
   double get maxPrice => prices.map((p) => p.price).reduce((a, b) => a > b ? a : b);
 
-  // Get price change over the period
   double get priceChange => prices.last.price - prices.first.price;
   double get priceChangePercentage => (priceChange / prices.first.price) * 100;
 
-  // Check if price went up or down
   bool get isPriceUp => priceChange >= 0;
 }
 

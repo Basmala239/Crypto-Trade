@@ -1,25 +1,27 @@
-import 'package:crypto_trade/data/model/coin_model.dart';
+import 'package:crypto_trade/core/string_extensions.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../../core/assets_manager.dart';
 import '../../../core/colors.dart';
+import '../../../data/model/favorite_model.dart';
 
-Widget walletItemWidget(CoinModel item){
+Widget walletItemWidget(FavoriteWithBalance item){
   return Padding(padding: EdgeInsetsGeometry.all(8),
       child: Row(
         children: [
-          SvgPicture.asset(item.icon, width: 40, height: 40,),
+          ClipOval(
+             child: SizedBox(width: 40, height: 40,
+                 child: Image.network(item.favorite.coinImage)
+             ),
+          ),
           SizedBox(width: 12,),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(item.label, style: TextStyle(
+              Text(item.favorite.coinName.firstTwoWords, style: TextStyle(
                   color: MyColor.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w700
               ),),
-              Text(item.type, style: TextStyle(
+              Text(item.favorite.coinSymbol, style: TextStyle(
                   color: MyColor.gray77,
                   fontSize: 14,
                   fontWeight: FontWeight.w400
@@ -30,12 +32,12 @@ Widget walletItemWidget(CoinModel item){
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(item.price, style: TextStyle(
+              Text(item.formattedProfitLossPercentage, style: TextStyle(
                   color: MyColor.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w700
               ),),
-              Text(item.total, style: TextStyle(
+              Text('${item.favorite.priceWhenAdded}', style: TextStyle(
                   color: MyColor.gray77,
                   fontSize: 14,
                   fontWeight: FontWeight.w400

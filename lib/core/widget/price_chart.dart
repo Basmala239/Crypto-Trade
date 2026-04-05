@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-import '../../data/model/responce/market_chart.dart';
+import '../../data/model/response/market_chart.dart';
 import '../colors.dart';
 
 class PriceChart extends StatefulWidget {
@@ -10,11 +10,11 @@ class PriceChart extends StatefulWidget {
   final double currentPrice;
 
   const PriceChart({
-    Key? key,
+    super.key,
     required this.chartData,
     required this.coinSymbol,
     required this.currentPrice,
-  }) : super(key: key);
+  });
 
   @override
   State<PriceChart> createState() => _PriceChartState();
@@ -33,12 +33,10 @@ class _PriceChartState extends State<PriceChart> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with price info
           _buildPriceHeader(),
           const SizedBox(height: 24),
 
 
-          // The chart
           SizedBox(
             height: 250,
             child: _buildLineChart(),
@@ -46,7 +44,6 @@ class _PriceChartState extends State<PriceChart> {
 
           const SizedBox(height: 16),
 
-          // Stats
           _buildStats(),
         ],
       ),
@@ -100,7 +97,7 @@ class _PriceChartState extends State<PriceChart> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withAlpha(25),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
@@ -128,7 +125,6 @@ class _PriceChartState extends State<PriceChart> {
       );
     }
 
-    // Normalize data for chart
     final minPrice = widget.chartData.minPrice;
     final maxPrice = widget.chartData.maxPrice;
     final priceRange = maxPrice - minPrice;

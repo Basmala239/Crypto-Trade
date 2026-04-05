@@ -3,8 +3,6 @@ class AssetsManager{
 
   static const iconPath='assets/icons';
   static const imagePath='assets/images';
-
-  //images
   static const logo='$imagePath/logo.svg';
   static const onboarding1='$imagePath/onboarding1.svg';
   static const onboarding2='$imagePath/onboarding2.svg';
@@ -14,7 +12,6 @@ class AssetsManager{
   static const badTrend='$imagePath/badTrend.svg';
   static const noNotification='$imagePath/noNotification.svg';
 
-  //icons
   static const language="$iconPath/language.svg";
   static const currency="$iconPath/currency.svg";
   static const appearance="$iconPath/appearance.svg";
@@ -63,7 +60,7 @@ class AssetsManager{
 
 
 
-  //fonts
+
 
 
 }

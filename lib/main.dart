@@ -1,10 +1,7 @@
 import 'package:crypto_trade/core/colors.dart';
-import 'package:crypto_trade/features/profile/view/profile_view.dart';
 import 'package:crypto_trade/features/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'features/setting/view/settings_view.dart';
 
 void main() {
   runApp(const MyApp());

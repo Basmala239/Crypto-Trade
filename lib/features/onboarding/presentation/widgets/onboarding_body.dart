@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/widget/custom_buttons.dart';
+import '../../../../data/repository/user_repository.dart';
 import '../../../auth/auth_view.dart';
 import 'custom_indicator.dart';
 import 'custom_page_view.dart';
@@ -14,6 +15,8 @@ class OnBoardingViewBody extends StatefulWidget {
 
 class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
   PageController? pageController;
+  UserRepository _userRepo = UserRepository();
+
 
   @override
   void initState() {
@@ -48,6 +51,7 @@ class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.easeIn);
                 } else {
+                  _userRepo.setFirstVisitCompleted();
                   Navigator.push(context,MaterialPageRoute(builder: (context)=>const AuthView()) );
                 }
               },

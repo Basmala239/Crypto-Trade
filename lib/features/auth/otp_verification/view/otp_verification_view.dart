@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import '../../../../core/colors.dart';
 class OtpVerificationView extends StatelessWidget {
   const OtpVerificationView({super.key});
 

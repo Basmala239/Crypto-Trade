@@ -5,6 +5,8 @@ import 'package:flutter_svg/svg.dart';
 Widget emptyView(String image, String title, String subTitle){
   return Center(
     child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SvgPicture.asset(image),
         SizedBox(height: 8,),

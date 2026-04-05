@@ -1,44 +1,41 @@
 import 'package:crypto_trade/core/colors.dart';
 import 'package:crypto_trade/features/home/view/home_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../core/assets_manager.dart';
 import '../../../../../core/widget/custom_buttons.dart';
 import '../../../../../core/widget/custom_text_field.dart';
 import '../../../../../core/widget/header_text.dart';
 import '../../../../../data/model/user.dart';
 import '../../../../../data/repository/user_repository.dart';
-import '../../../sign_in/presentation/widgets/icon_button.dart';
+import 'icon_button.dart';
 
-class SignUpBody extends StatefulWidget {
-  const SignUpBody({super.key});
+class SignInBody extends StatefulWidget {
+  const SignInBody({super.key});
 
   @override
-  State<SignUpBody> createState() => _SignUpBodyState();
+  State<SignInBody> createState() => _SignInBodyState();
 }
 
-class _SignUpBodyState extends State<SignUpBody> {
+class _SignInBodyState extends State<SignInBody> {
   final UserRepository _userRepo = UserRepository();
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isEmail = true;
   bool _isLoading = false;
   bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
+  bool isCheckboxSelected = false;
 
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _mobileController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     _emailController.dispose();
+    _mobileController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    _nameController.dispose();
-    _phoneController.dispose();
     super.dispose();
   }
 
@@ -46,11 +43,26 @@ class _SignUpBodyState extends State<SignUpBody> {
     if (value == null || value.isEmpty) {
       return 'Email is required';
     }
+
     final emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
     final regExp = RegExp(emailPattern);
 
     if (!regExp.hasMatch(value)) {
       return 'Please enter a valid email address';
+    }
+    return null;
+  }
+
+  String? _validateMobile(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Mobile number is required';
+    }
+
+    final phonePattern = r'^[0-9]{10,15}$';
+    final regExp = RegExp(phonePattern);
+
+    if (!regExp.hasMatch(value.replaceAll(RegExp(r'[^0-9]'), ''))) {
+      return 'Please enter a valid mobile number';
     }
     return null;
   }
@@ -63,47 +75,10 @@ class _SignUpBodyState extends State<SignUpBody> {
     if (value.length < 6) {
       return 'Password must be at least 6 characters';
     }
-
     return null;
   }
 
-  String? _validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please confirm your password';
-    }
-
-    if (value != _passwordController.text) {
-      return 'Passwords do not match';
-    }
-    return null;
-  }
-
-  String? _validateName(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Name is required';
-    }
-
-    if (value.length < 2) {
-      return 'Name must be at least 2 characters';
-    }
-    return null;
-  }
-
-  String? _validatePhone(String? value) {
-    if (value == null || value.isEmpty) {
-      return null;
-    }
-
-    final phonePattern = r'^[0-9]{10,15}$';
-    final regExp = RegExp(phonePattern);
-
-    if (!regExp.hasMatch(value.replaceAll(RegExp(r'[^0-9]'), ''))) {
-      return 'Please enter a valid phone number';
-    }
-    return null;
-  }
-
-  Future<void> _handleSignUp() async {
+  Future<void> _handleSignIn() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -113,49 +88,47 @@ class _SignUpBodyState extends State<SignUpBody> {
     });
 
     try {
-      final emailExists = await _userRepo.isEmailExists(_emailController.text.trim());
+      final email = isEmail ? _emailController.text.trim() : _mobileController.text.trim();
+      final password = _passwordController.text;
 
-      if (emailExists) {
+      User? user;
+
+      if (isEmail) {
+        user = await _userRepo.authenticateUser(email, password);
+      } else {
+        final allUsers = await _userRepo.getAllUsers();
+        user = allUsers.firstWhere(
+              (u) => u.phone == email && u.password == password,
+          orElse: () => throw Exception('Invalid credentials'),
+        );
+      }
+
+      if (user != null) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Email already registered. Please sign in.'),
+              content: Text('Login successful!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+
+          await _userRepo.setUserId(user.id!);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeLayout(),
+            ),
+          );
+        }
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Invalid email or password'),
               backgroundColor: Colors.red,
             ),
           );
         }
-        setState(() {
-          _isLoading = false;
-        });
-        return;
-      }
-
-      final user = User(
-        name: _nameController.text.trim(),
-        email: _emailController.text.trim().toLowerCase(),
-        password: _passwordController.text,
-        phone: _phoneController.text.trim().isEmpty ? null : _phoneController.text.trim(),
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
-
-      final createdUser = await _userRepo.createUser(user);
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Account created successfully!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-
-        await _userRepo.setUserId(createdUser.id!);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomeLayout(),
-          ),
-        );
       }
     } catch (e) {
       if (mounted) {
@@ -183,52 +156,65 @@ class _SignUpBodyState extends State<SignUpBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            headerText("Sign up"),
+            headerText("Sign in"),
             const SizedBox(height: 30),
-
-            const Text("Full Name",
-              style: TextStyle(color: MyColor.grayB7),
-            ),
-            const SizedBox(height: 10),
-            CustomTextField(
-              controller: _nameController,
-              hint: 'Enter your full name',
-              validator: _validateName,
-              onTap: () {},
-            ),
-            const SizedBox(height: 20),
 
             Row(
               children: [
-                const Text("Email",
-                  style: TextStyle(color: MyColor.grayB7),
+                Text(isEmail ? "Email" : "Mobile Number",
+                  style: const TextStyle(color: MyColor.grayB7),
                 ),
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
+                    setState(() {
+                      isEmail = !isEmail;
+                      if (isEmail) {
+                        _mobileController.clear();
+                      } else {
+                        _emailController.clear();
+                      }
+                    });
                   },
-                  child: const Text("Sign up with mobile",
-                    style: TextStyle(color: MyColor.mainColor),
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: "Sign in with ",
+                          style: TextStyle(color: MyColor.mainColor),
+                        ),
+                        TextSpan(
+                          text: isEmail ? "mobile" : "email",
+                          style: const TextStyle(color: MyColor.mainColor),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 10),
-            CustomTextField(
+            isEmail
+                ? CustomTextField(
               controller: _emailController,
               hint: 'Enter your email',
               validator: _validateEmail,
               onTap: () {},
+            )
+                : CustomTextField(
+              controller: _mobileController,
+              hint: 'Enter your mobile number',
+              validator: _validateMobile,
+              onTap: () {},
             ),
             const SizedBox(height: 20),
-
             const Text('Password',
               style: TextStyle(color: MyColor.grayB7),
             ),
             const SizedBox(height: 10),
             CustomTextField(
               controller: _passwordController,
-              hint: 'Enter your password (min 6 characters)',
+              hint: 'Enter your password',
               isPassword: true,
               obscureText: _obscurePassword,
               validator: _validatePassword,
@@ -240,55 +226,48 @@ class _SignUpBodyState extends State<SignUpBody> {
               onTap: () {},
             ),
             const SizedBox(height: 10),
-
-            const Text('Confirm Password',
-              style: TextStyle(color: MyColor.grayB7),
-            ),
-            const SizedBox(height: 10),
-            CustomTextField(
-              controller: _confirmPasswordController,
-              hint: 'Confirm your password',
-              isPassword: true,
-              obscureText: _obscureConfirmPassword,
-              validator: _validateConfirmPassword,
-              onToggleVisibility: () {
-                setState(() {
-                  _obscureConfirmPassword = !_obscureConfirmPassword;
-                });
-              },
-              onTap: () {},
-            ),
-            const SizedBox(height: 10),
-
-            const Text('Phone Number (Optional)',
-              style: TextStyle(color: MyColor.grayB7),
-            ),
-            const SizedBox(height: 10),
-            CustomTextField(
-              controller: _phoneController,
-              hint: 'Enter your phone number',
-              validator: _validatePhone,
-              onTap: () {},
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Forgot password feature coming soon'),
+                      ),
+                    );
+                  },
+                  child: const Text('Forget Password',
+                    style: TextStyle(color: MyColor.mainColor),
+                  ),
+                ),
+                const Spacer(),
+                Checkbox(activeColor:MyColor.mainColor,value: isCheckboxSelected, onChanged: (value) {
+                  setState(() {
+                    _userRepo.setRememberMe(value!);
+                    isCheckboxSelected = value!;
+                  });
+                }),
+                const Text('Remember me',
+                  style: TextStyle(color: MyColor.grayB7),
+                ),
+              ]
             ),
             const SizedBox(height: 30),
-
             CustomButton(
-              text: _isLoading ? "Creating account..." : "Sign up",
-              onTap: _handleSignUp,
+              text: _isLoading ? "Signing in..." : "Sign in",
+              onTap: _handleSignIn,
               editWidth: double.infinity,
             ),
             const SizedBox(height: 30),
-
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Or Sign up with',
+                Text('Or Login with',
                   style: TextStyle(color: MyColor.grayB7),
                 ),
               ],
             ),
             const SizedBox(height: 30),
-
             Row(
               children: [
                 CustomIconButton(
@@ -305,7 +284,6 @@ class _SignUpBodyState extends State<SignUpBody> {
               ],
             ),
             const SizedBox(height: 50),
-
             Center(
               child: Column(
                 children: [

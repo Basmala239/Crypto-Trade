@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import '../colors.dart';
 class CustomButton extends StatelessWidget {
-  const CustomButton({Key? key, required this.text, required this.onTap, this.editWidth=180, this.color = MyColor.mainColor })
-      : super(key: key);
+  const CustomButton({super.key, required this.text, required this.onTap, this.editWidth=180, this.color = MyColor.mainColor });
   final String text;
   final VoidCallback onTap;
   final double editWidth;

@@ -1,17 +1,12 @@
-import 'package:crypto_trade/data/model/responce/coin.dart';
+import 'package:crypto_trade/data/model/response/coin.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../../core/assets_manager.dart';
 import '../../../core/colors.dart';
 import '../../../core/widget/custom_app_bar.dart';
 import '../../../core/widget/error_view.dart';
-import '../../../data/model/coin_model.dart';
-import '../../../data/model/responce/coin_market.dart';
+import '../../../data/model/response/coin_market.dart';
 import '../../../data/services/coin_gecko_service.dart';
-import '../../auth/signin/presentation/widgets/signin_tap.dart';
+import '../../auth/sign_in/presentation/widgets/sign_in_tap.dart';
 import '../../coin_details/view/coin_detail.dart';
-import '../../profile/view/profile_view.dart';
 import 'market_item_widget.dart';
 
 class MarketBody extends StatefulWidget {
@@ -76,7 +71,7 @@ class _MarketBodyState extends State<MarketBody> {
     }
 
     if (_error != null) {
-      return errorView(_error, _refreshData);;
+      return errorView(_error, _refreshData);
     }
 
     return Padding(padding: EdgeInsets.all(16),
@@ -141,31 +136,6 @@ class _MarketBodyState extends State<MarketBody> {
                     Divider(color: MyColor.gray35,),
               ),
             ),
-            SizedBox(height: 8,),
-            Container(
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                color: MyColor.gray77.withAlpha(10),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: MyColor.gray77)
-              ),
-              child: TextButton(onPressed: () {},
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                    Icon(Icons.add_circle,color: MyColor.gray77),
-                    SizedBox(width: 8,),
-                    Text("Add Favorite", style: TextStyle(
-                      color: MyColor.gray77,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400
-                    ),)
-                  ],)),
-
-            ),
-            SizedBox(height: 8,)
           ],
         )
     );

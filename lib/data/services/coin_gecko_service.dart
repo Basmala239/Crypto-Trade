@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../model/responce/coin_market.dart';
-import '../model/responce/market_chart.dart';
-import '../model/responce/trending_coin.dart';
+import '../model/response/coin_market.dart';
+import '../model/response/market_chart.dart';
+import '../model/response/trending_coin.dart';
 
 class CoinGeckoService {
   static const String baseUrl = 'https://api.coingecko.com/api/v3';
 
-  // Fetch top 20 coins by market cap
   Future<List<CoinMarket>> fetchTopCoins({int perPage = 20, int page = 1}) async {
     try {
       final response = await http.get(
@@ -25,7 +24,6 @@ class CoinGeckoService {
     }
   }
 
-  // Fetch trending coins
   Future<List<TrendingCoin>> fetchTrendingCoins() async {
     try {
       final response = await http.get(
@@ -44,7 +42,6 @@ class CoinGeckoService {
     }
   }
 
-  // Fetch all market coins (with pagination)
   Future<List<CoinMarket>> fetchMarketCoins({int perPage = 50, int page = 1}) async {
     try {
       final response = await http.get(
@@ -76,27 +73,6 @@ class CoinGeckoService {
       }
     } catch (e) {
       throw Exception('Error fetching market chart: $e');
-    }
-  }
-
-  Future<MarketChart> fetchMarketChartWithRange(
-      String coinId, {
-        required String from,
-        required String to,
-      }) async {
-    try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/coins/$coinId/market_chart/range?vs_currency=usd&from=$from&to=$to'),
-      );
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
-        return MarketChart.fromJson(data);
-      } else {
-        throw Exception('Failed to load market chart range: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Error fetching market chart range: $e');
     }
   }
 }

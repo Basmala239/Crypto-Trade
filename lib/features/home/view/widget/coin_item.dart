@@ -1,11 +1,8 @@
 import 'package:crypto_trade/core/colors.dart';
-import 'package:crypto_trade/data/model/coin_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../../core/assets_manager.dart';
-import '../../../../data/model/responce/coin.dart';
-import '../../../../data/model/responce/coin_market.dart';
+import '../../../../data/model/response/coin.dart';
 
 Widget coinItemWidget(Coin item) {
   return Container(

@@ -1,16 +1,12 @@
 import 'package:crypto_trade/features/activity/view/activity_body.dart';
 import 'package:crypto_trade/features/home/view/widget/custom_bottom_nav_bar.dart';
 import 'package:crypto_trade/features/home/view/widget/home_body.dart';
-import 'package:crypto_trade/features/market/view/marketBody.dart';
-import 'package:crypto_trade/features/setting/view/settings_view.dart';
+import 'package:crypto_trade/features/market/view/market_body.dart';
 import 'package:crypto_trade/features/wallet/view/wallet_body.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
 import '../../../core/assets_manager.dart';
 import '../../../core/colors.dart';
 import '../../../data/model/home_grid_item_model.dart';
-import '../../profile/view/profile_view.dart';
 
 class HomeLayout extends StatefulWidget {
   const HomeLayout({super.key});
@@ -75,6 +71,6 @@ class _HomeLayoutState extends State<HomeLayout> {
         ),
 
       ),
-    );;
+    );
   }
 }

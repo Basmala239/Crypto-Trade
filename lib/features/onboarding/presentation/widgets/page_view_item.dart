@@ -4,8 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/colors.dart';
 
 class PageViewItem extends StatelessWidget {
-  const PageViewItem({Key? key,required this.title,required this.subTitle,required this.image})
-      : super(key: key);
+  const PageViewItem({super.key,required this.title,required this.subTitle,required this.image});
 
   final String title;
   final String subTitle;
